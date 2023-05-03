@@ -23,7 +23,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "^1.9.3"
   },
   "engines": {
     "node": ">=18.0.0"
