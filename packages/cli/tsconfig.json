@@ -1,0 +1,7 @@
+{
+  "extends": ["tsconfig/library.json"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "allowJs": true
+  }
+}

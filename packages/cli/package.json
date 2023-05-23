@@ -1,0 +1,37 @@
+{
+  "name": "@matrix/cli",
+  "version": "1.0.0",
+  "description": "",
+  "import": "./dist/cli.mjs",
+  "type": "module",
+  "scripts": {
+    "build": "bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs",
+    "start": "node ./generate.js",
+    "generate": "node -r @swc-node/register ./generate.ts",
+    "test": "pnpm build && pnpm matrix-ui add button"
+  },
+  "bin": {
+    "matrix-ui": "./dist/cli.mjs"
+  },
+  "private": false,
+  "keywords": [],
+  "author": "Sanna Jammeh",
+  "license": "ISC",
+  "devDependencies": {
+    "@matrix/core": "workspace:*",
+    "@swc-node/register": "^1.6.5",
+    "@types/node": "^20.2.3",
+    "@types/prompts": "^2.4.4",
+    "@types/yargs": "^17.0.24",
+    "bunchee": "3.1.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@matrix/cli": "workspace:^",
+    "ora": "^6.3.1",
+    "glob": "^10.2.6",
+    "prompts": "^2.4.2",
+    "yargs": "^17.7.2"
+  }
+}
