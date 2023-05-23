@@ -1,0 +1,15 @@
+.gridBackground {
+  --size: 0.02em;
+  --color: rgba(79, 79, 79, 0.2);
+  background-color: transparent;
+  background-image: linear-gradient(
+      var(--color) var(--size),
+      transparent var(--size)
+    ),
+    linear-gradient(90deg, var(--color) var(--size), transparent var(--size));
+  background-size: 1em 1em;
+  background-position: -1px -1px;
+}
+:global(.dark) .gridBackground {
+  --color: rgba(79, 79, 79, 1);
+}

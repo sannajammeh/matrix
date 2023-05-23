@@ -9,16 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/node": "^18.16.3",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.1",
-    "eslint": "8.39.0",
-    "eslint-config-next": "13.3.4",
-    "next": "^13.3.4",
-    "nextra": "^2.4.2",
-    "nextra-theme-docs": "^2.4.2",
+    "@matrix/core": "workspace:*",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@tw-classed/react": "^1.5.0",
+    "@types/node": "^20.2.3",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.3",
+    "next": "^13.4.3",
+    "next-themes": "^0.2.1",
+    "nextra": "^2.6.0",
+    "nextra-theme-docs": "^2.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-wrap-balancer": "^0.5.0",
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2"
   }
 }

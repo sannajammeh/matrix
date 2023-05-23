@@ -1,11 +1,14 @@
+import Nextra from "nextra";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ["@matrix/core"],
 };
 
-const withNextra = require("nextra")({
+const withNextra = Nextra({
   theme: "nextra-theme-docs",
   themeConfig: "./theme.config.tsx",
 });
 
-module.exports = withNextra(nextConfig);
+export default withNextra(nextConfig);
