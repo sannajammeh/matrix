@@ -1,25 +1,40 @@
 {
-  "name": "core",
+  "name": "@matrix/core",
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "dist/index.esm.js",
-  "types": "dist/index.esm.d.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "files": [
-    "dist/**",
-    "./package.json"
+    "./package.json",
+    "./src/**",
+    "./tailwind.config.js"
   ],
   "scripts": {
-    "build": "bunchee ./src/index.ts -f esm -o ./dist/index.esm.js",
-    "dev": "bunchee ./src/index.ts -f esm -o ./dist/index.esm.js -w"
+    "build_1": "bunchee ./src/index.ts -f esm -o ./dist/index.esm.js",
+    "dev_1": "bunchee ./src/index.ts -f esm -o ./dist/index.esm.js -w"
   },
   "private": false,
   "keywords": [],
   "author": "Sanna Jammeh",
   "license": "ISC",
   "devDependencies": {
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "autoprefixer": "^10.4.14",
     "bunchee": "3.1.1",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
     "tsconfig": "workspace:*",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@radix-ui/colors": "^0.1.8",
+    "@radix-ui/react-dropdown-menu": "^2.0.4",
+    "@radix-ui/react-label": "^2.0.1",
+    "@radix-ui/react-popover": "^1.0.5",
+    "@tw-classed/core": "^1.5.0",
+    "@tw-classed/react": "^1.5.0",
+    "tailwind-merge": "^1.12.0"
   }
 }
