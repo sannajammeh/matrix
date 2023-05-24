@@ -45,6 +45,7 @@ export async function addComponent({
   // Check if the component already exists and ask the user if they want to overwrite it
   const componentExists = await fileExists(componentPath);
   if (componentExists) {
+    spinner.stop();
     const result = await prompts({
       type: "confirm",
       name: "overwrite",
@@ -52,11 +53,10 @@ export async function addComponent({
       initial: false,
     });
 
-    spinner.stop();
-
     if (!result.overwrite) return;
   }
 
+  spinner.start("Adding component");
   // Write the component
   await writeComponent(name, content, resolvedComponentsDir);
 

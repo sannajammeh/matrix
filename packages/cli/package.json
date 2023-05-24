@@ -12,7 +12,8 @@
   },
   "files": [
     "dist",
-    "./generated-modules.json"
+    "./generated-modules.json",
+    "./package.json"
   ],
   "bin": {
     "radiant-ui": "./dist/cli.mjs"

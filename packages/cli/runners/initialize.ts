@@ -134,6 +134,27 @@ export async function initClassedConfig({
     spinner.succeed("Created classed.config.ts");
   }
 
+  spinner.start("Writing index.ts");
+
+  // Write index.ts file
+  const indexFilePath = path.join(rootDir, config.components, "index.ts");
+  const indexFileExists = existsSync(
+    path.join(rootDir, config.components, "index.ts")
+  );
+  if (!indexFileExists) {
+    await writeFile(indexFilePath, `export * from "./classed.config"`);
+  } else {
+    const indexFile = await readFile(indexFilePath, "utf-8");
+    if (!indexFile.includes("classed.config")) {
+      await writeFile(
+        indexFilePath,
+        `${indexFile}\nexport * from "./classed.config"`
+      );
+    }
+  }
+
+  spinner.succeed("Wrote index.ts");
+
   // Check package.json for deps required and install them
   const deps = new Set([...Object.keys(packageJson.dependencies || {})]);
 

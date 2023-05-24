@@ -2,21 +2,21 @@
 
 import yargs from "yargs";
 
-import { getConfig, getPackageJson } from "./utils/getConfig";
-import prompts from "prompts";
+import { getConfig } from "./utils/getConfig";
 import {
   forceGitCommit,
   initClassedConfig,
   initGlobals,
-  initialize,
   initializeConfig,
   promptFrameworkInfo,
 } from "./runners/initialize";
 import { addComponent } from "./runners/addComponent";
 import ora from "ora";
-import { AsyncLocalStorage } from "async_hooks";
 import { globalStore } from "./utils/globalStore";
-import { exitProcess } from "./utils/exec";
+import { createRequire } from "module";
+import { getCLIPath } from "./utils/get-cli-path";
+
+const version = createRequire(getCLIPath())("./package.json").version as string;
 
 const ROOT_DIR = process.cwd();
 
@@ -36,8 +36,11 @@ const initialArgs = yargs(process.argv.slice(2))
     });
   })
   .command("init", "Initialize a new project")
-
   .demandCommand(1)
+  .version(version)
+  .alias("version", "v")
+  .help()
+  .alias("help", "h")
   .help().argv as Awaited<ReturnType<(typeof yargs)["parse"]>>;
 
 const command = initialArgs._[0];
@@ -54,8 +57,6 @@ async function runAddComponent(name: string) {
     config = result.config;
   }
 
-  const spinner = ora(`Adding ${name}`).start();
-
   await addComponent({
     name,
     rootDir: ROOT_DIR,
@@ -63,8 +64,6 @@ async function runAddComponent(name: string) {
       components: config.components,
     },
   });
-
-  spinner.succeed(`Added ${name}`);
 }
 
 globalStore.enterWith({
