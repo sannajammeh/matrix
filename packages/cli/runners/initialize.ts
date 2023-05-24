@@ -274,11 +274,14 @@ export async function forceGitCommit() {
   const hasUncommitted = await execAsync<string>("git status --porcelain").then(
     (r) => r.trim() !== ""
   );
-  console.log(
-    "🚀 ~ file: initialize.ts:275 ~ forceGitCommit ~ hasUncommitted:",
-    hasUncommitted
-  );
 
+  if (!hasUncommitted) {
+    return; // No need as there are no uncommitted changes
+  }
+
+  console.log(
+    "You have uncommitted changes. Please commit them before continuing"
+  );
   process.exit(0);
   // If it is, make sure there are no uncommitted changes
   // If there are, prompt user to commit them
