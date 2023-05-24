@@ -1,5 +1,5 @@
 {
-  "name": "@matrix/cli",
+  "name": "@radiant/cli",
   "version": "1.0.0",
   "description": "",
   "import": "./dist/cli.mjs",
@@ -18,7 +18,7 @@
   "author": "Sanna Jammeh",
   "license": "ISC",
   "devDependencies": {
-    "@matrix/core": "workspace:*",
+    "@radiant/core": "workspace:*",
     "@swc-node/register": "^1.6.5",
     "@types/node": "^20.2.3",
     "@types/prompts": "^2.4.4",
@@ -28,7 +28,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@matrix/cli": "workspace:^",
+    "@radiant/cli": "workspace:^",
     "ora": "^6.3.1",
     "glob": "^10.2.6",
     "prompts": "^2.4.2",

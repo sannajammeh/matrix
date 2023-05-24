@@ -3,7 +3,7 @@ import Nextra from "nextra";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@matrix/core"],
+  transpilePackages: ["@radiant/core"],
 };
 
 const withNextra = Nextra({

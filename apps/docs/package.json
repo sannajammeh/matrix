@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@matrix/core": "workspace:*",
+    "@radiant/core": "workspace:*",
     "@radix-ui/react-icons": "^1.3.0",
     "@tw-classed/react": "^1.5.0",
     "@types/node": "^20.2.3",
