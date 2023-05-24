@@ -10,3 +10,7 @@ export const execAsync = async <T extends string>(command: string) => {
     });
   });
 };
+
+export const exitProcess = () => {
+  process.exit(0);
+};

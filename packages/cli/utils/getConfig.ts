@@ -1,5 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
+import { UI_NAME } from "./domain";
 
 export interface RadiantUiConfig {
   components: string;
@@ -13,10 +14,10 @@ export async function getConfig(rootDir: string) {
     path.resolve(rootDir, "package.json"),
     "utf-8"
   );
-  const matrixUi = JSON.parse(packageJson)["radiant-cli"];
+  const matrixUi = JSON.parse(packageJson)[UI_NAME];
 
   const matrixUiFile = await readFile(
-    path.resolve(rootDir, "radiant-ui.json"),
+    path.resolve(rootDir, `${UI_NAME}.json`),
     "utf-8"
   )
     .then((f) => JSON.parse(f) as RadiantUiConfig)
@@ -26,7 +27,7 @@ export async function getConfig(rootDir: string) {
   return config
     ? {
         config,
-        target: matrixUiFile ? "radiant-ui.json" : "package.json",
+        target: matrixUiFile ? `${UI_NAME}.json` : "package.json",
       }
     : undefined;
 }

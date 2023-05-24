@@ -14,6 +14,8 @@ import {
 import { addComponent } from "./runners/addComponent";
 import ora from "ora";
 import { AsyncLocalStorage } from "async_hooks";
+import { globalStore } from "./utils/globalStore";
+import { exitProcess } from "./utils/exec";
 
 const ROOT_DIR = process.cwd();
 
@@ -24,6 +26,12 @@ const initialArgs = yargs(process.argv.slice(2))
     yargs.positional("name", {
       type: "string",
       describe: "Name of the component",
+    });
+
+    yargs.option("force", {
+      type: "boolean",
+      alias: "f",
+      describe: "Force overwrite",
     });
   })
   .command("init", "Initialize a new project")
@@ -37,29 +45,34 @@ async function runAddComponent(name: string) {
   let config = (await getConfig(ROOT_DIR))?.config;
 
   if (!config) {
-    const response = await prompts([
+    const response = await prompts(
+      [
+        {
+          type: "confirm",
+          name: "shouldInit",
+          message: "No matrix-ui config found. Do you want to create one?",
+          initial: true,
+        },
+        {
+          type: (prev) => (prev ? "select" : null),
+          name: "target",
+          message: "Where do you want to create the config? (its very small)",
+          choices: [
+            {
+              title: "In package.json",
+              value: "package.json",
+            },
+            {
+              title: "Separate matrix-ui.json",
+              value: "matrix-ui.json",
+            },
+          ],
+        },
+      ],
       {
-        type: "confirm",
-        name: "shouldInit",
-        message: "No matrix-ui config found. Do you want to create one?",
-        initial: true,
-      },
-      {
-        type: (prev) => (prev ? "select" : null),
-        name: "target",
-        message: "Where do you want to create the config? (its very small)",
-        choices: [
-          {
-            title: "In package.json",
-            value: "package.json",
-          },
-          {
-            title: "Separate matrix-ui.json",
-            value: "matrix-ui.json",
-          },
-        ],
-      },
-    ]);
+        onCancel: exitProcess,
+      }
+    );
 
     if (!response.shouldInit) {
       console.log("This will result in a prompt each time you run matrix-ui.");
@@ -86,21 +99,29 @@ async function runAddComponent(name: string) {
   spinner.succeed(`Added ${name}`);
 }
 
+globalStore.enterWith({
+  argv: initialArgs,
+});
 async function runInit() {
   // Grab and store package.json in async local storage
   await forceGitCommit();
-  const frameworkInfo = await promptFrameworkInfo();
+
+  const frameworkInfo = await promptFrameworkInfo(ROOT_DIR);
   const { config } = await initializeConfig({
     rootDir: ROOT_DIR,
     framework: frameworkInfo,
   });
 
-  await initGlobals(config);
-
   // 5. Check for file configurations (tailwind.config.js, globals.css, classed.config.js)
-  // 6. If they exist, ask if they want to overwrite
-  // 7. If they don't, ask where they want to create them
-  // 8. Instruct user how to add a component next
+  const { responses } = await initGlobals({
+    config,
+    rootDir: ROOT_DIR,
+    framework: frameworkInfo,
+  });
+
+  responses.forEach((response) => {
+    console.log(response);
+  });
 }
 
 switch (command) {

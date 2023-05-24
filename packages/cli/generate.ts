@@ -23,9 +23,18 @@ async function bootstrap() {
     .crawl(componentsPath)
     .withPromise();
 
+  const tailwindFile = path.resolve("../core/tailwind.config.js");
+  const pluginRadixColors = path.resolve("../core/plugin-radix-colors.js");
+  const globalStyles = path.resolve("../core/globals.css");
+
   const contentJson: ContentMap = {};
 
-  for (const file of files) {
+  for (const file of [
+    ...files,
+    tailwindFile,
+    pluginRadixColors,
+    globalStyles,
+  ]) {
     // Fetch each file
     const content = await readFile(file, "utf-8");
 
