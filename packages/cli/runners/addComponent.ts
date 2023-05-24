@@ -49,6 +49,7 @@ export async function addComponent({
       type: "confirm",
       name: "overwrite",
       message: `Component ${name} already exists. Do you want to overwrite it?`,
+      initial: false,
     });
 
     spinner.stop();

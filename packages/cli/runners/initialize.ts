@@ -105,6 +105,50 @@ export async function initialize({ target, rootDir }: InitializeArgs) {
   };
 }
 
+export async function initClassedConfig({
+  rootDir,
+  config,
+}: {
+  rootDir: string;
+  config: RadiantUiConfig;
+}) {
+  const packageJson = await getPackageJson(rootDir);
+  const spinner = ora("Installing and configuring tw-classed").start();
+  const classedConfig = await new fdir({
+    exclude: (dirName) => dirName.includes("node_modules"),
+  })
+    .glob("**/classed.config.ts")
+    .crawl(rootDir)
+    .withPromise();
+
+  if (classedConfig.length === 0) {
+    spinner.start("Creating classed.config.ts");
+    // Create classed.config.ts
+    const classedConfigModule = await getSingleComponent("classed.config");
+
+    await writeFileRecursive(
+      path.join(rootDir, config.components, "classed.config.ts"),
+      classedConfigModule.content
+    );
+
+    spinner.succeed("Created classed.config.ts");
+  }
+
+  // Check package.json for deps required and install them
+  const deps = new Set([...Object.keys(packageJson.dependencies || {})]);
+
+  const devDeps = new Set([...Object.keys(packageJson.devDependencies || {})]);
+
+  const missingDeps = requiredDeps.filter((dep) => !deps.has(dep));
+  const missingDevDeps = requiredDevDeps.filter((dep) => !devDeps.has(dep));
+
+  await installDependencies({
+    dependencies: missingDeps,
+    devDependencies: missingDevDeps,
+    spinner,
+  });
+}
+
 export async function initializeConfig({
   rootDir,
   framework,
@@ -232,9 +276,41 @@ export async function initializeConfig({
   };
 }
 
+export async function detectFrameworkInfo(rootDir: string) {
+  // Only test for next.js for now
+  const nextConfig = await getFdir()
+    .glob("**/next.config.js")
+    .onlyCounts()
+    .crawl(rootDir)
+    .withPromise();
+  const srcDir = await getFdir()
+    .glob("**/src")
+    .onlyCounts()
+    .crawl(rootDir)
+    .withPromise();
+
+  if (nextConfig.files > 0) {
+    return {
+      framework: "next" as const,
+      srcDir: srcDir.directories > 0,
+    };
+  }
+
+  return null;
+}
+
 export async function promptFrameworkInfo(
   rootDir: string
 ): Promise<FrameworkInfo> {
+  const detected = await detectFrameworkInfo(rootDir);
+
+  if (detected) {
+    return {
+      framework: detected.framework,
+      srcDir: detected.srcDir,
+    };
+  }
+
   const frameworkInfo = await prompts(
     [
       {

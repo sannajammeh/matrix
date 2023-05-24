@@ -6,6 +6,7 @@ import { getConfig, getPackageJson } from "./utils/getConfig";
 import prompts from "prompts";
 import {
   forceGitCommit,
+  initClassedConfig,
   initGlobals,
   initialize,
   initializeConfig,
@@ -45,45 +46,12 @@ async function runAddComponent(name: string) {
   let config = (await getConfig(ROOT_DIR))?.config;
 
   if (!config) {
-    const response = await prompts(
-      [
-        {
-          type: "confirm",
-          name: "shouldInit",
-          message: "No matrix-ui config found. Do you want to create one?",
-          initial: true,
-        },
-        {
-          type: (prev) => (prev ? "select" : null),
-          name: "target",
-          message: "Where do you want to create the config? (its very small)",
-          choices: [
-            {
-              title: "In package.json",
-              value: "package.json",
-            },
-            {
-              title: "Separate matrix-ui.json",
-              value: "matrix-ui.json",
-            },
-          ],
-        },
-      ],
-      {
-        onCancel: exitProcess,
-      }
-    );
+    const result = await initializeConfig({
+      rootDir: ROOT_DIR,
+      framework: await promptFrameworkInfo(ROOT_DIR),
+    });
 
-    if (!response.shouldInit) {
-      console.log("This will result in a prompt each time you run matrix-ui.");
-    } else {
-      const result = await initialize({
-        target: response.target,
-        rootDir: ROOT_DIR,
-      });
-
-      config = result.config;
-    }
+    config = result.config;
   }
 
   const spinner = ora(`Adding ${name}`).start();
@@ -92,7 +60,7 @@ async function runAddComponent(name: string) {
     name,
     rootDir: ROOT_DIR,
     config: {
-      components: config?.components!, // TODO fix this
+      components: config.components,
     },
   });
 
@@ -117,6 +85,11 @@ async function runInit() {
     config,
     rootDir: ROOT_DIR,
     framework: frameworkInfo,
+  });
+
+  await initClassedConfig({
+    config,
+    rootDir: ROOT_DIR,
   });
 
   responses.forEach((response) => {
