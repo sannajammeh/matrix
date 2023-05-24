@@ -2,16 +2,23 @@
 
 import yargs from "yargs";
 
-import { getConfig } from "./utils/getConfig";
+import { getConfig, getPackageJson } from "./utils/getConfig";
 import prompts from "prompts";
-import { initialize } from "./runners/initialize";
+import {
+  forceGitCommit,
+  initGlobals,
+  initialize,
+  initializeConfig,
+  promptFrameworkInfo,
+} from "./runners/initialize";
 import { addComponent } from "./runners/addComponent";
 import ora from "ora";
+import { AsyncLocalStorage } from "async_hooks";
 
 const ROOT_DIR = process.cwd();
 
 const initialArgs = yargs(process.argv.slice(2))
-  .scriptName("matrix-ui")
+  .scriptName("radiant-ui")
   .usage("$0 <cmd> [args]")
   .command("add <name>", "Add a new component", (yargs) => {
     yargs.positional("name", {
@@ -19,6 +26,7 @@ const initialArgs = yargs(process.argv.slice(2))
       describe: "Name of the component",
     });
   })
+  .command("init", "Initialize a new project")
 
   .demandCommand(1)
   .help().argv as Awaited<ReturnType<(typeof yargs)["parse"]>>;
@@ -26,7 +34,7 @@ const initialArgs = yargs(process.argv.slice(2))
 const command = initialArgs._[0];
 
 async function runAddComponent(name: string) {
-  let config = await getConfig(ROOT_DIR);
+  let config = (await getConfig(ROOT_DIR))?.config;
 
   if (!config) {
     const response = await prompts([
@@ -78,8 +86,21 @@ async function runAddComponent(name: string) {
   spinner.succeed(`Added ${name}`);
 }
 
-function runInit() {
-  console.log("Initializing");
+async function runInit() {
+  // Grab and store package.json in async local storage
+  await forceGitCommit();
+  const frameworkInfo = await promptFrameworkInfo();
+  const { config } = await initializeConfig({
+    rootDir: ROOT_DIR,
+    framework: frameworkInfo,
+  });
+
+  await initGlobals(config);
+
+  // 5. Check for file configurations (tailwind.config.js, globals.css, classed.config.js)
+  // 6. If they exist, ask if they want to overwrite
+  // 7. If they don't, ask where they want to create them
+  // 8. Instruct user how to add a component next
 }
 
 switch (command) {

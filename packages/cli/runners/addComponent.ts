@@ -1,7 +1,6 @@
 import path from "path";
-import { MatrixUiConfig, getPackageJson } from "../utils/getConfig";
+import { RadiantUiConfig, getPackageJson } from "../utils/getConfig";
 import {
-  IModule,
   fetchGeneratedModules,
   getRecursiveComponent,
   getSingleComponent,
@@ -15,7 +14,7 @@ import { installDependencies } from "./installDeps";
 interface Config {
   name: string;
   rootDir: string;
-  config: MatrixUiConfig;
+  config: RadiantUiConfig;
 }
 
 export async function addComponent({

@@ -6,12 +6,16 @@
   "type": "module",
   "scripts": {
     "build": "bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs",
-    "start": "node ./generate.js",
-    "generate": "node -r @swc-node/register ./generate.ts",
+    "watch": "bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs -w",
+    "generate": "node --loader @swc-node/register/esm ./generate.ts",
     "test": "pnpm build && pnpm matrix-ui add button"
   },
+  "files": [
+    "dist",
+    "./generated-modules.json"
+  ],
   "bin": {
-    "matrix-ui": "./dist/cli.mjs"
+    "radiant-ui": "./dist/cli.mjs"
   },
   "private": false,
   "keywords": [],
@@ -25,12 +29,13 @@
     "@types/yargs": "^17.0.24",
     "bunchee": "3.1.1",
     "tsconfig": "workspace:*",
+    "@radiant/cli": "workspace:^",
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@radiant/cli": "workspace:^",
+    "fdir": "^6.0.1",
     "ora": "^6.3.1",
-    "glob": "^10.2.6",
+    "picomatch": "^2.3.1",
     "prompts": "^2.4.2",
     "yargs": "^17.7.2"
   }

@@ -1,7 +1,7 @@
 import { readFile } from "fs/promises";
 import path from "path";
 
-export interface MatrixUiConfig {
+export interface RadiantUiConfig {
   components: string;
 }
 
@@ -13,16 +13,22 @@ export async function getConfig(rootDir: string) {
     path.resolve(rootDir, "package.json"),
     "utf-8"
   );
-  const matrixUi = JSON.parse(packageJson)["matrix-cli"];
+  const matrixUi = JSON.parse(packageJson)["radiant-cli"];
 
   const matrixUiFile = await readFile(
-    path.resolve(rootDir, "matrix-ui.json"),
+    path.resolve(rootDir, "radiant-ui.json"),
     "utf-8"
   )
-    .then((f) => JSON.parse(f) as MatrixUiConfig)
+    .then((f) => JSON.parse(f) as RadiantUiConfig)
     .catch(() => undefined);
 
-  return matrixUiFile ?? (matrixUi as MatrixUiConfig | undefined);
+  const config = matrixUiFile ?? (matrixUi as RadiantUiConfig | undefined);
+  return config
+    ? {
+        config,
+        target: matrixUiFile ? "radiant-ui.json" : "package.json",
+      }
+    : undefined;
 }
 
 export async function getPackageJson(rootDir: string) {

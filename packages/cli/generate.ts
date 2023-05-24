@@ -1,12 +1,10 @@
-import { glob } from "glob";
+import { fdir } from "fdir";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 
 const FILE_NAME = "generated-modules.json";
 
-const componentsPath = path.resolve(
-  "./node_modules/@matrix/core/src/components"
-);
+const componentsPath = path.resolve("../core/src/components");
 
 interface Content {
   content: string;
@@ -19,7 +17,11 @@ type ContentMap = Record<string, Content>;
 const relative_import_regex = /^import\s.*from\s*["']\..*["'];$/;
 
 async function bootstrap() {
-  const files = await glob(`${componentsPath}/**/*.{ts,tsx}`);
+  const files = await new fdir()
+    .glob(`**/*.{ts,tsx}`)
+    .withFullPaths()
+    .crawl(componentsPath)
+    .withPromise();
 
   const contentJson: ContentMap = {};
 
