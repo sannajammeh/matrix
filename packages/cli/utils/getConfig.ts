@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { UI_NAME } from "./domain";
 
-export interface RadiantUiConfig {
+export interface n5UiConfig {
   components: string;
 }
 
@@ -20,10 +20,10 @@ export async function getConfig(rootDir: string) {
     path.resolve(rootDir, `${UI_NAME}.json`),
     "utf-8"
   )
-    .then((f) => JSON.parse(f) as RadiantUiConfig)
+    .then((f) => JSON.parse(f) as n5UiConfig)
     .catch(() => undefined);
 
-  const config = matrixUiFile ?? (matrixUi as RadiantUiConfig | undefined);
+  const config = matrixUiFile ?? (matrixUi as n5UiConfig | undefined);
   return config
     ? {
         config,

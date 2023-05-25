@@ -21,7 +21,7 @@ const version = createRequire(getCLIPath())("./package.json").version as string;
 const ROOT_DIR = process.cwd();
 
 const initialArgs = yargs(process.argv.slice(2))
-  .scriptName("radiant-ui")
+  .scriptName("n5-ui")
   .usage("$0 <cmd> [args]")
   .command("add <name>", "Add a new component", (yargs) => {
     yargs.positional("name", {

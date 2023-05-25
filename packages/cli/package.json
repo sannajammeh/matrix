@@ -1,5 +1,5 @@
 {
-  "name": "@radiant/cli",
+  "name": "@n5/cli",
   "version": "1.0.0",
   "description": "",
   "import": "./dist/cli.mjs",
@@ -16,21 +16,21 @@
     "./package.json"
   ],
   "bin": {
-    "radiant-ui": "./dist/cli.mjs"
+    "n5": "./dist/cli.mjs"
   },
   "private": false,
   "keywords": [],
   "author": "Sanna Jammeh",
   "license": "ISC",
   "devDependencies": {
-    "@radiant/core": "workspace:*",
+    "@n5/core": "workspace:*",
     "@swc-node/register": "^1.6.5",
     "@types/node": "^20.2.3",
     "@types/prompts": "^2.4.4",
     "@types/yargs": "^17.0.24",
     "bunchee": "3.1.1",
     "tsconfig": "workspace:*",
-    "@radiant/cli": "workspace:^",
+    "@n5/cli": "workspace:^",
     "typescript": "^5.0.4"
   },
   "dependencies": {

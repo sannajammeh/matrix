@@ -30,7 +30,7 @@ export const getTailwindPreset = () => {
       },
     },
     plugins: [
-      require("./plugin-radix-colors")({
+      require("./radix-colors")({
         colors: ["blue", "slate", "gray"],
       }),
     ],

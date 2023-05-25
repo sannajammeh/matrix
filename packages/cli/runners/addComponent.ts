@@ -1,5 +1,5 @@
 import path from "path";
-import { RadiantUiConfig, getPackageJson } from "../utils/getConfig";
+import { n5UiConfig, getPackageJson } from "../utils/getConfig";
 import {
   fetchGeneratedModules,
   getRecursiveComponent,
@@ -14,7 +14,7 @@ import { installDependencies } from "./installDeps";
 interface Config {
   name: string;
   rootDir: string;
-  config: RadiantUiConfig;
+  config: n5UiConfig;
 }
 
 export async function addComponent({

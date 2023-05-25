@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import React from "react";
-import { Button, Card, CardContent, classed, cn } from "@radiant/core";
+import { Button, Card, CardContent, classed, cn } from "@n5/core";
 import Balancer from "react-wrap-balancer";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import classes from "./home.module.css";

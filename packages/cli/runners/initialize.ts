@@ -1,5 +1,5 @@
 import prompts from "prompts";
-import { getConfig, getPackageJson, RadiantUiConfig } from "../utils/getConfig";
+import { getConfig, getPackageJson, n5UiConfig } from "../utils/getConfig";
 import ora from "ora";
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
@@ -37,7 +37,7 @@ export async function initialize({ target, rootDir }: InitializeArgs) {
     },
   ]);
 
-  const config: RadiantUiConfig = {
+  const config: n5UiConfig = {
     components: configQuestions.components,
   };
 
@@ -110,7 +110,7 @@ export async function initClassedConfig({
   config,
 }: {
   rootDir: string;
-  config: RadiantUiConfig;
+  config: n5UiConfig;
 }) {
   const packageJson = await getPackageJson(rootDir);
   const spinner = ora("Installing and configuring tw-classed").start();
@@ -257,7 +257,7 @@ export async function initializeConfig({
 
   let configToWrite = {
     components: answer.components,
-  } satisfies RadiantUiConfig;
+  } satisfies n5UiConfig;
 
   if (override) {
     configToWrite = {
@@ -300,7 +300,7 @@ export async function initializeConfig({
 export async function detectFrameworkInfo(rootDir: string) {
   // Only test for next.js for now
   const nextConfig = await getFdir()
-    .glob("**/next.config.js")
+    .glob("**/next.config.{mjs,js,cjs,tsx}")
     .onlyCounts()
     .crawl(rootDir)
     .withPromise();
@@ -381,7 +381,7 @@ export async function initGlobals({
   framework,
 }: {
   rootDir: string;
-  config: RadiantUiConfig;
+  config: n5UiConfig;
   framework: FrameworkInfo;
 }) {
   let responses: string[] = [];
@@ -394,7 +394,7 @@ export async function initGlobals({
   // 5. Check for file configurations (tailwind.config.js, globals.css, classed.config.js)
   const [presetLocation] = await new fdir()
     .withFullPaths()
-    .glob("**/preset-radiant.js")
+    .glob("**/preset-n5.js")
     .crawl(rootDir)
     .withPromise();
   const [tailwindLocation] = await getFdir()
@@ -408,7 +408,7 @@ export async function initGlobals({
     .crawl(rootDir)
     .withPromise();
 
-  let presetPath = path.join(config.components, "preset-radiant.js");
+  let presetPath = path.join(config.components, "preset-n5.js");
   let tailwindWritten = false;
   if (!tailwindLocation) {
     const answer = await prompts(
@@ -438,7 +438,7 @@ export async function initGlobals({
       responses.push(
         `
 Tailwind config not written, you will need to add the presets yourself
-See: https://radiant.vercel.app/docs/getting-started`.trim()
+See: https://n5.vercel.app/docs/getting-started`.trim()
       );
   }
 
@@ -480,7 +480,7 @@ See: https://radiant.vercel.app/docs/getting-started`.trim()
   }
 
   responses.push(
-    "Globals written. You can now use the radiant components in your app enter: `pnpm radient-ui add <component>`"
+    "Globals written. You can now use the n5 components in your app enter: `pnpm n5 add <component>`"
   );
 
   spinner.succeed("Globals initialized");
