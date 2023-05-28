@@ -5,7 +5,7 @@
   "import": "./dist/cli.mjs",
   "type": "module",
   "scripts": {
-    "build": "bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs",
+    "build": "pnpm generate && bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs",
     "watch": "bunchee --runtime node -f esm ./cli.ts -o ./dist/cli.mjs -w",
     "generate": "node --loader @swc-node/register/esm ./generate.ts",
     "test": "pnpm build && pnpm matrix-ui add button"

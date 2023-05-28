@@ -24,7 +24,7 @@ async function bootstrap() {
     .withPromise();
 
   const tailwindFile = path.resolve("../core/tailwind.config.js");
-  const pluginRadixColors = path.resolve("../core/plugin-radix-colors.js");
+  const pluginRadixColors = path.resolve("../core/radix-colors.js");
   const globalStyles = path.resolve("../core/globals.css");
 
   const contentJson: ContentMap = {};

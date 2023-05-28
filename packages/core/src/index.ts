@@ -11,3 +11,5 @@ export * from "./components/typography";
 export * from "./components/separator";
 export * from "./components/loading";
 export * from "./components/menu-item";
+export * from "./components/dialog";
+export * from "./components/alert-dialog";
